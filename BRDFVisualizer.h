@@ -50,7 +50,7 @@ private:
     float3 m_Wo = float3(0.0, 0.0, 1.0);
     float m_roughness = 1.0f;
     float m_metallic = 0.0f;
-    Texture::SharedPtr m_MainViewTex;
+    //Texture::SharedPtr m_MainViewTex;
     Texture::SharedPtr m_PreviewTex;
 
 

@@ -15,6 +15,7 @@ void materialBallPass::Resize(uint32_t width, uint32_t height)
     Fbo::Desc desc;
     desc.setSampleCount(0);
     desc.setColorTarget(0, Falcor::ResourceFormat::RGBA16Float);    // outputTexture
+    desc.setDepthStencilTarget(ResourceFormat::D32Float);
     m_Fbo = Fbo::create2D(width, height, desc);
 
     m_Width = width;
@@ -24,7 +25,9 @@ void materialBallPass::Resize(uint32_t width, uint32_t height)
 void materialBallPass::Execute(RenderContext* pRenderContext)
 {
     Camera::SharedPtr camera = m_scene->getCamera();
-
+    //camera->setFrameWidth(m_Width);
+    //camera->setFrameHeight(m_Height);
+    camera->setAspectRatio((float)m_Width / (float)m_Height);
     m_GraphicsState->setFbo(m_Fbo);
 
     auto cb = m_ProgramVars["PerFrameCB"];
@@ -55,7 +58,7 @@ void materialBallPass::CreatePipeline()
     m_RasterizerState = RasterizerState::create(rasterStateDesc);
 
     DepthStencilState::Desc depthStancilDesc;
-    depthStancilDesc.setDepthFunc(ComparisonFunc::Greater).setDepthEnabled(true);
+    depthStancilDesc.setDepthFunc(ComparisonFunc::Less).setDepthEnabled(true);
     m_DepthStencilState = DepthStencilState::create(depthStancilDesc);
 
     m_Program->addDefines(m_scene->getSceneDefines());

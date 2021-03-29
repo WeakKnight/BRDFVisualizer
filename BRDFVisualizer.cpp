@@ -57,7 +57,7 @@ void BRDFVisualizer::onGuiRender(Gui* pGui)
 
     {
         Gui::Window w(pGui, "Main View", { 950, 900 }, {280, 0});
-        w.image("View", m_MainViewTex, {920, 120});
+        w.image("View", m_materialBallPass->GetOutputTexture(), {920, 120});
         
     }
 
@@ -69,21 +69,21 @@ void BRDFVisualizer::onGuiRender(Gui* pGui)
 
 void BRDFVisualizer::onLoad(RenderContext* pRenderContext)
 {
-    m_MainViewTex = Texture::create2D(900, 835, ResourceFormat::RGBA16Float, 1, 1, nullptr, ResourceBindFlags::AllColorViews);
+    //m_MainViewTex = Texture::create2D(900, 835, ResourceFormat::RGBA16Float, 1, 1, nullptr, ResourceBindFlags::AllColorViews);
     m_PreviewTex = Texture::create2D(600, 540, ResourceFormat::RGBA16Float, 1, 1, nullptr, ResourceBindFlags::AllColorViews);
 
-    m_materialBallPass = materialBallPass::Create(800, 600);
+    m_materialBallPass = materialBallPass::Create(900, 835);
 }
 
 void BRDFVisualizer::onFrameRender(RenderContext* pRenderContext, const Fbo::SharedPtr& pTargetFbo)
 {
     const float4 clearColor(0.38f, 0.52f, 0.10f, 1);
     pRenderContext->clearFbo(pTargetFbo.get(), clearColor, 1.0f, 0, FboAttachmentType::All);
-    pRenderContext->clearTexture(m_MainViewTex.get());
+    //pRenderContext->clearTexture(m_MainViewTex.get());
     pRenderContext->clearTexture(m_PreviewTex.get());
 
     m_materialBallPass->Execute(pRenderContext);
-    m_MainViewTex = m_materialBallPass->GetOutputTexture();
+    //m_MainViewTex = m_materialBallPass->GetOutputTexture();
 }
 
 void BRDFVisualizer::onShutdown()
