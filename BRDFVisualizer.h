@@ -30,6 +30,8 @@
 
 using namespace Falcor;
 
+class materialBallPass;
+
 class BRDFVisualizer : public IRenderer
 {
 public:
@@ -50,4 +52,7 @@ private:
     float m_metallic = 0.0f;
     Texture::SharedPtr m_MainViewTex;
     Texture::SharedPtr m_PreviewTex;
+
+
+    std::shared_ptr<materialBallPass> m_materialBallPass;
 };

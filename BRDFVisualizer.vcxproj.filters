@@ -2,8 +2,13 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="BRDFVisualizer.cpp" />
+    <ClCompile Include="materialBallPass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BRDFVisualizer.h" />
+    <ClInclude Include="materialBallPass.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="materialBallPass.slang" />
   </ItemGroup>
 </Project>

@@ -26,6 +26,7 @@
  # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **************************************************************************/
 #include "BRDFVisualizer.h"
+#include "materialBallPass.h"
 uint32_t mSampleGuiWidth = 250;
 uint32_t mSampleGuiHeight = 200;
 uint32_t mSampleGuiPositionX = 20;
@@ -70,6 +71,8 @@ void BRDFVisualizer::onLoad(RenderContext* pRenderContext)
 {
     m_MainViewTex = Texture::create2D(900, 835, ResourceFormat::RGBA16Float, 1, 1, nullptr, ResourceBindFlags::AllColorViews);
     m_PreviewTex = Texture::create2D(600, 540, ResourceFormat::RGBA16Float, 1, 1, nullptr, ResourceBindFlags::AllColorViews);
+
+    m_materialBallPass = materialBallPass::Create(800, 600);
 }
 
 void BRDFVisualizer::onFrameRender(RenderContext* pRenderContext, const Fbo::SharedPtr& pTargetFbo)
@@ -78,6 +81,9 @@ void BRDFVisualizer::onFrameRender(RenderContext* pRenderContext, const Fbo::Sha
     pRenderContext->clearFbo(pTargetFbo.get(), clearColor, 1.0f, 0, FboAttachmentType::All);
     pRenderContext->clearTexture(m_MainViewTex.get());
     pRenderContext->clearTexture(m_PreviewTex.get());
+
+    m_materialBallPass->Execute(pRenderContext);
+    m_MainViewTex = m_materialBallPass->GetOutputTexture();
 }
 
 void BRDFVisualizer::onShutdown()

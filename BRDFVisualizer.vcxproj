@@ -12,14 +12,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BRDFVisualizer.cpp" />
+    <ClCompile Include="materialBallPass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BRDFVisualizer.h" />
+    <ClInclude Include="materialBallPass.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Falcor\Falcor.vcxproj">
       <Project>{2c535635-e4c5-4098-a928-574f0e7cd5f9}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="materialBallPass.slang" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0B69B725-D786-4AE3-AB93-E60762116EE9}</ProjectGuid>
@@ -68,6 +73,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ConformanceMode>true</ConformanceMode>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -85,6 +91,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ConformanceMode>true</ConformanceMode>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
