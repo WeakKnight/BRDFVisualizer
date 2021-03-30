@@ -57,13 +57,13 @@ void BRDFVisualizer::onGuiRender(Gui* pGui)
 
     {
         Gui::Window w(pGui, "Main View", { 950, 900 }, {280, 0});
-        w.image("View", m_materialBallPass->GetOutputTexture(), {920, 120});
+        w.image("View", m_PreviewTex, {920, 120});
         
     }
 
     {
         Gui::Window w(pGui, "Material Preview", { 303, 300 }, {1039, 480});
-        w.image("Preview", m_PreviewTex, { 280, 0 });
+        w.image("Preview", m_materialBallPass->GetOutputTexture(), { 280, 0 });
     }
 }
 
@@ -112,7 +112,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 {
     BRDFVisualizer::UniquePtr pRenderer = std::make_unique<BRDFVisualizer>();
     SampleConfig config;
-    config.windowDesc.title = "Falcor Project Template";
+    config.windowDesc.title = "BRDF Visualizer";
     config.windowDesc.resizableWindow = false;
     config.windowDesc.width = 1600;
     config.windowDesc.height = 900;
