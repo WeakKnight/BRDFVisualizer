@@ -27,6 +27,9 @@
  **************************************************************************/
 #include "BRDFVisualizer.h"
 #include "materialBallPass.h"
+#include "ResourceManager.h"
+#include "RenderSettings.h"
+
 uint32_t mSampleGuiWidth = 250;
 uint32_t mSampleGuiHeight = 200;
 uint32_t mSampleGuiPositionX = 20;
@@ -69,10 +72,11 @@ void BRDFVisualizer::onGuiRender(Gui* pGui)
 
 void BRDFVisualizer::onLoad(RenderContext* pRenderContext)
 {
+    InitResourceManager();
     //m_MainViewTex = Texture::create2D(900, 835, ResourceFormat::RGBA16Float, 1, 1, nullptr, ResourceBindFlags::AllColorViews);
     m_PreviewTex = Texture::create2D(600, 540, ResourceFormat::RGBA16Float, 1, 1, nullptr, ResourceBindFlags::AllColorViews);
 
-    m_materialBallPass = materialBallPass::Create(900, 835);
+    m_materialBallPass = MaterialBallPass::Create(900, 835);
 }
 
 void BRDFVisualizer::onFrameRender(RenderContext* pRenderContext, const Fbo::SharedPtr& pTargetFbo)
@@ -110,6 +114,8 @@ void BRDFVisualizer::onResizeSwapChain(uint32_t width, uint32_t height)
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
 {
+    InitRenderSettings();
+
     BRDFVisualizer::UniquePtr pRenderer = std::make_unique<BRDFVisualizer>();
     SampleConfig config;
     config.windowDesc.title = "BRDF Visualizer";

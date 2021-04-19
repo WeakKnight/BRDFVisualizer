@@ -1,8 +1,10 @@
 #include "materialBallPass.h"
+#include "RenderSettings.h"
+#include "ResourceManager.h"
 
-materialBallPass::SharedPtr materialBallPass::Create(uint32_t width, uint32_t height)
+MaterialBallPass::SharedPtr MaterialBallPass::Create(uint32_t width, uint32_t height)
 {
-    materialBallPass::SharedPtr result = materialBallPass::SharedPtr(new materialBallPass());
+    MaterialBallPass::SharedPtr result = MaterialBallPass::SharedPtr(new MaterialBallPass());
 
     result->Resize(width, height);
     result->CreatePipeline();
@@ -10,7 +12,7 @@ materialBallPass::SharedPtr materialBallPass::Create(uint32_t width, uint32_t he
     return result;
 }
 
-void materialBallPass::Resize(uint32_t width, uint32_t height)
+void MaterialBallPass::Resize(uint32_t width, uint32_t height)
 {
     Fbo::Desc desc;
     desc.setSampleCount(0);
@@ -22,9 +24,9 @@ void materialBallPass::Resize(uint32_t width, uint32_t height)
     m_Height = height;
 }
 
-void materialBallPass::Execute(RenderContext* pRenderContext)
+void MaterialBallPass::Execute(RenderContext* pRenderContext)
 {
-    Camera::SharedPtr camera = m_scene->getCamera();
+    Camera::SharedPtr camera = GetResourceManager()->GetScene()->getCamera();
     //camera->setFrameWidth(m_Width);
     //camera->setFrameHeight(m_Height);
     camera->setAspectRatio((float)m_Width / (float)m_Height);
@@ -38,14 +40,12 @@ void materialBallPass::Execute(RenderContext* pRenderContext)
     const float4 clearColor(0.0f, 0.0f, 0.0f, 1);
     pRenderContext->clearFbo(m_Fbo.get(), clearColor, 1.0f, 0, FboAttachmentType::All);
 
-    m_scene->rasterize(pRenderContext, m_GraphicsState.get(), m_ProgramVars.get(), renderFlags);
+    GetResourceManager()->GetScene()->rasterize(pRenderContext, m_GraphicsState.get(), m_ProgramVars.get(), renderFlags);
     
 }
 
-void materialBallPass::CreatePipeline()
+void MaterialBallPass::CreatePipeline()
 {
-    m_scene = Scene::create("VPLMedia/materialBall/materialBall.pyscene");
-
     Program::Desc desc;
     desc.addShaderLibrary("Samples/BRDFVisualizer/materialBallPass.slang").vsEntry("vsMain").psEntry("psMain");
     desc.setShaderModel("6_2");
@@ -61,7 +61,7 @@ void materialBallPass::CreatePipeline()
     depthStancilDesc.setDepthFunc(ComparisonFunc::Less).setDepthEnabled(true);
     m_DepthStencilState = DepthStencilState::create(depthStancilDesc);
 
-    m_Program->addDefines(m_scene->getSceneDefines());
+    m_Program->addDefines(GetResourceManager()->GetScene()->getSceneDefines());
     m_ProgramVars = GraphicsVars::create(m_Program->getReflector());
 
     m_GraphicsState = GraphicsState::create();

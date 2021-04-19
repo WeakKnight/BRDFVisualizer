@@ -11,12 +11,22 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AccumulatePass.cpp" />
     <ClCompile Include="BRDFVisualizer.cpp" />
     <ClCompile Include="materialBallPass.cpp" />
+    <ClCompile Include="PostProcessingPass.cpp" />
+    <ClCompile Include="RenderSettings.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AccumulatePass.h" />
     <ClInclude Include="BRDFVisualizer.h" />
+    <ClInclude Include="Json.hpp" />
     <ClInclude Include="materialBallPass.h" />
+    <ClInclude Include="PostProcessingPass.h" />
+    <ClInclude Include="RenderSettings.h" />
+    <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Falcor\Falcor.vcxproj">
@@ -25,6 +35,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="materialBallPass.slang" />
+    <CopyFileToFolders Include="settings.json">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <ShaderSource Include="Accumulate.cs.slang" />
+    <ShaderSource Include="PostProcessingPass.ps.slang" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0B69B725-D786-4AE3-AB93-E60762116EE9}</ProjectGuid>

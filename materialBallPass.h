@@ -4,12 +4,12 @@
 using namespace Falcor;
 
 
-class materialBallPass : public std::enable_shared_from_this<materialBallPass>
+class MaterialBallPass : public std::enable_shared_from_this<MaterialBallPass>
 {
 public:
-    using SharedPtr = std::shared_ptr<materialBallPass>;
+    using SharedPtr = std::shared_ptr<MaterialBallPass>;
 
-    static materialBallPass::SharedPtr Create(uint32_t width, uint32_t height);
+    static MaterialBallPass::SharedPtr Create(uint32_t width, uint32_t height);
     void Resize(uint32_t width, uint32_t height);
     void Execute(RenderContext* renderContext);
     //void OnGuiRender(Gui::Window& w);
@@ -25,8 +25,6 @@ private:
 
     RasterizerState::SharedPtr      m_RasterizerState = nullptr;
     DepthStencilState::SharedPtr    m_DepthStencilState = nullptr;
-
-    Scene::SharedPtr m_scene = nullptr;
 
     Fbo::SharedPtr                  m_Fbo;
     uint32_t m_Width;
