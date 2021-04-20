@@ -15,6 +15,8 @@
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="BRDFVisualizationPass.cpp" />
+    <ClCompile Include="sdfConstructionPass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BRDFVisualizer.h" />
@@ -37,10 +39,11 @@
     <ClInclude Include="Utils.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="BRDFVisualizationPass.h" />
+    <ClInclude Include="sdfConstructionPass.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="materialBallPass.slang" />
-    <None Include="settings.json" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="AccumulatePass">
@@ -60,5 +63,9 @@
     <ShaderSource Include="PostProcessingPass.ps.slang">
       <Filter>PostProcessingPass</Filter>
     </ShaderSource>
+    <ShaderSource Include="sdfConstructionPass.cs.slang" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="settings.json" />
   </ItemGroup>
 </Project>

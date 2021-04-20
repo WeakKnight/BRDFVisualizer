@@ -31,6 +31,8 @@
 using namespace Falcor;
 
 class MaterialBallPass;
+class BRDFVisualizationPass;
+class sdfConstructionPass;
 
 class BRDFVisualizer : public IRenderer
 {
@@ -55,4 +57,6 @@ private:
 
 
     std::shared_ptr<MaterialBallPass> m_materialBallPass;
+    std::shared_ptr<BRDFVisualizationPass> m_BRDFVisualizationPass;
+    std::shared_ptr<sdfConstructionPass> m_sdfConstructionPass;
 };

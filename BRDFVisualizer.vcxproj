@@ -12,20 +12,24 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AccumulatePass.cpp" />
+    <ClCompile Include="BRDFVisualizationPass.cpp" />
     <ClCompile Include="BRDFVisualizer.cpp" />
     <ClCompile Include="materialBallPass.cpp" />
     <ClCompile Include="PostProcessingPass.cpp" />
     <ClCompile Include="RenderSettings.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="sdfConstructionPass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AccumulatePass.h" />
+    <ClInclude Include="BRDFVisualizationPass.h" />
     <ClInclude Include="BRDFVisualizer.h" />
     <ClInclude Include="Json.hpp" />
     <ClInclude Include="materialBallPass.h" />
     <ClInclude Include="PostProcessingPass.h" />
     <ClInclude Include="RenderSettings.h" />
     <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="sdfConstructionPass.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
@@ -42,6 +46,7 @@
   <ItemGroup>
     <ShaderSource Include="Accumulate.cs.slang" />
     <ShaderSource Include="PostProcessingPass.ps.slang" />
+    <ShaderSource Include="sdfConstructionPass.cs.slang" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0B69B725-D786-4AE3-AB93-E60762116EE9}</ProjectGuid>

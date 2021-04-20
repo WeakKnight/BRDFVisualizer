@@ -29,11 +29,16 @@
 #include "materialBallPass.h"
 #include "ResourceManager.h"
 #include "RenderSettings.h"
+#include "BRDFVisualizationPass.h"
+#include "sdfConstructionPass.h"
 
 uint32_t mSampleGuiWidth = 250;
 uint32_t mSampleGuiHeight = 200;
 uint32_t mSampleGuiPositionX = 20;
 uint32_t mSampleGuiPositionY = 40;
+static bool generated = false;
+static int dispatchTimes = 60;
+static int dispatchCounter = 0;
 
 void BRDFVisualizer::onGuiRender(Gui* pGui)
 {
@@ -60,7 +65,7 @@ void BRDFVisualizer::onGuiRender(Gui* pGui)
 
     {
         Gui::Window w(pGui, "Main View", { 950, 900 }, {280, 0});
-        w.image("View", m_PreviewTex, {920, 120});
+        w.image("View", m_BRDFVisualizationPass->GetOutputTexture(), {920, 120});
         
     }
 
@@ -77,16 +82,28 @@ void BRDFVisualizer::onLoad(RenderContext* pRenderContext)
     m_PreviewTex = Texture::create2D(600, 540, ResourceFormat::RGBA16Float, 1, 1, nullptr, ResourceBindFlags::AllColorViews);
 
     m_materialBallPass = MaterialBallPass::Create(900, 835);
+    m_BRDFVisualizationPass = BRDFVisualizationPass::Create(900, 835);
+    m_sdfConstructionPass = sdfConstructionPass::Create();
 }
 
 void BRDFVisualizer::onFrameRender(RenderContext* pRenderContext, const Fbo::SharedPtr& pTargetFbo)
 {
     const float4 clearColor(0.38f, 0.52f, 0.10f, 1);
     pRenderContext->clearFbo(pTargetFbo.get(), clearColor, 1.0f, 0, FboAttachmentType::All);
-    //pRenderContext->clearTexture(m_MainViewTex.get());
-    pRenderContext->clearTexture(m_PreviewTex.get());
 
+    pRenderContext->clearTexture(m_PreviewTex.get());
     m_materialBallPass->Execute(pRenderContext);
+    if (!generated)
+    {  
+        m_sdfConstructionPass->Execute(pRenderContext, dispatchCounter);
+        dispatchCounter++;
+        if(dispatchCounter >= dispatchTimes)
+        generated = true;
+
+    }
+    m_BRDFVisualizationPass->Execute(m_sdfConstructionPass->GetGrid(),pRenderContext);
+    pRenderContext->flush(true);
+
     //m_MainViewTex = m_materialBallPass->GetOutputTexture();
 }
 
