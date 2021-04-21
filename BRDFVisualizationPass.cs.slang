@@ -97,6 +97,13 @@ float march(float3 origin, float3 direction)
     return pMaxDepth;
 }
 
+float3 ScreenSpaceDither( float2 vScreenPos )
+{
+    float3 vDither = float3( dot( float2( 171.0, 231.0 ), vScreenPos.xy ) );
+    vDither.rgb = frac( vDither.rgb / float3( 103.0, 71.0, 97.0 ) );
+    
+    return vDither.rgb / 255.0;
+}
 
 [numthreads(16, 16, 1)]
 void main(uint3 launchIndex : SV_DispatchThreadID)
@@ -128,7 +135,7 @@ void main(uint3 launchIndex : SV_DispatchThreadID)
     
     // Render color
     if (depth < pMaxDepth) {
-        gOutput[launchIndex.xy] = float4(float3(depth/pMaxDepth),1.0f);
+        gOutput[launchIndex.xy] = float4(float3(depth/pMaxDepth) + ScreenSpaceDither(launchIndex.xy), 1.0f);
     }
     else {
         gOutput[launchIndex.xy] = float4(0.0f, 0.0f, 0.0f, 1.0f);

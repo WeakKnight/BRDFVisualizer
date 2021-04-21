@@ -41,7 +41,7 @@ void MaterialBallPass::Execute(RenderContext* pRenderContext,float roughness, fl
     cb["gSpecular"] = specular;
     Scene::RenderFlags renderFlags = Scene::RenderFlags::UserRasterizerState;
 
-    const float4 clearColor(0.0f, 0.0f, 0.0f, 1);
+    const float4 clearColor(0.28f, 0.32f, 0.53f, 1);
     pRenderContext->clearFbo(m_Fbo.get(), clearColor, 1.0f, 0, FboAttachmentType::All);
 
     GetResourceManager()->GetScene()->rasterize(pRenderContext, m_GraphicsState.get(), m_ProgramVars.get(), renderFlags);

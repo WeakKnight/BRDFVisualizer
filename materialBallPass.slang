@@ -65,7 +65,7 @@ VertexOut vsMain(VertexIn vIn)
 
 float4 psMain(VertexOut vOut): SV_Target0
 {
-	const float3 color = 0.5f;
+	const float3 color = float3(0.3f, 0.4f, 0.8f);
     const float3 lightPos = float3(-0.2f, 9.6f, 7.8f);
     float3 viewDir = normalize(CameraPos - vOut.posW);
     float3 lightDir = normalize(lightPos - vOut.posW);

@@ -46,9 +46,9 @@ void BRDFVisualizer::onGuiRender(Gui* pGui)
     {
         Gui::Window w(pGui, "BRDF Model", { 350, 300 }, {0, 0});
         Gui::DropdownList BRDFTypes;
-        BRDFTypes.push_back({ 0, "Phong" });
-        BRDFTypes.push_back({ 1, "Blinn-Phong" });
-        BRDFTypes.push_back({ 2, "UE4" });
+        //BRDFTypes.push_back({ 0, "Phong" });
+        //BRDFTypes.push_back({ 1, "Blinn-Phong" });
+        BRDFTypes.push_back({ 0, "UE4" });
         if (w.dropdown("BRDF Models", BRDFTypes, m_BRDFModel))
         {
         }
