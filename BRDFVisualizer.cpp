@@ -68,6 +68,11 @@ void BRDFVisualizer::onGuiRender(Gui* pGui)
     }
 
     {
+        Gui::Window w(pGui, "Scene Settings", { 302, 600 }, { 1039, 0 });
+        GetResourceManager()->GetScene()->renderUI(w);
+    }
+
+    {
         Gui::Window w(pGui, "Material Preview", { 303, 300 }, {1039, 480});
         w.image("Preview", m_materialBallPass->GetOutputTexture(), { 280, 0 });
     }
