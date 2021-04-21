@@ -526,6 +526,7 @@ struct SimpleBRDF : IBRDF
             float3 H = normalize(wo + wi);
             float pdfOther = evalNdfGGX(alpha, H.z) * H.z / (4.f * dot(wo,H));
 
+
             pdf += pSpecularReflection * pdfOther;
         }
         

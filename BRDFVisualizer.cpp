@@ -37,8 +37,9 @@ uint32_t mSampleGuiHeight = 200;
 uint32_t mSampleGuiPositionX = 20;
 uint32_t mSampleGuiPositionY = 40;
 static bool generated = false;
-static int dispatchTimes = 60;
+static int dispatchTimes = 360;
 static int dispatchCounter = 0;
+static bool parameterChanged = true;
 
 void BRDFVisualizer::onGuiRender(Gui* pGui)
 {
@@ -54,13 +55,10 @@ void BRDFVisualizer::onGuiRender(Gui* pGui)
     }
     {
         Gui::Window w(pGui, "Local Geometry Params", { 350, 600 }, {0, 240});
-        w.direction("wi", m_Wi);
-        w.direction("wo", m_Wo);
-    }
-    {
-        Gui::Window w(pGui, "Material Params", { 302, 600 }, {1039, 0});
-        w.slider("roughness", m_roughness, 0.0f, 1.0f);
-        w.slider("metallic", m_metallic, 0.0f, 1.0f);
+        if (w.direction("wi", m_Wi)|| w.slider("roughness", m_roughness, 0.0f, 1.0f) || w.slider("metallic", m_metallic, 0.0f, 1.0f) || w.rgbColor("diffuse", m_D) || w.rgbColor("specular", m_S))
+        {
+            parameterChanged = true;
+        }
     }
 
     {
@@ -92,10 +90,19 @@ void BRDFVisualizer::onFrameRender(RenderContext* pRenderContext, const Fbo::Sha
     pRenderContext->clearFbo(pTargetFbo.get(), clearColor, 1.0f, 0, FboAttachmentType::All);
 
     pRenderContext->clearTexture(m_PreviewTex.get());
-    m_materialBallPass->Execute(pRenderContext);
+    
+
+    if (parameterChanged)
+    {
+        parameterChanged = false;
+        dispatchCounter = 0;
+        generated = false;
+        m_materialBallPass->Execute(pRenderContext, m_roughness, m_metallic, m_D, m_S);
+    }
+
     if (!generated)
     {  
-        m_sdfConstructionPass->Execute(pRenderContext, dispatchCounter);
+        m_sdfConstructionPass->Execute(pRenderContext, dispatchCounter, m_Wi, m_roughness, m_metallic, m_D, m_S);
         dispatchCounter++;
         if(dispatchCounter >= dispatchTimes)
         generated = true;

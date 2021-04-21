@@ -48,8 +48,10 @@ public:
 
 private:
     uint32_t m_BRDFModel = 0;
-    float3 m_Wi = float3(0.0, 0.0, 1.0);
+    float3 m_Wi = glm::normalize(float3(1.0, 1.0, 1.0));
     float3 m_Wo = float3(0.0, 0.0, 1.0);
+    float3 m_S = float3(0.5, 0.5, 0.5);
+    float3 m_D = float3(0.5, 0.5, 0.5);
     float m_roughness = 1.0f;
     float m_metallic = 0.0f;
     //Texture::SharedPtr m_MainViewTex;

@@ -9,6 +9,10 @@ cbuffer PerFrameCB
     float3 mappedSize;
     float3 gInputDirection;
     uint randomIndex;
+    float gRoughness;
+    float gMetalic;
+    float3 gDiffuse;
+    float3 gSpecular;
     
 
 };
@@ -41,13 +45,15 @@ void main(uint3 launchIndex : SV_DispatchThreadID)
     float3 dir = sample_sphere(xy);
     
     SimpleBRDF simpleBRDF;
-    simpleBRDF.setup(float3(0.5f), float3(0.5f), 0.3f, 0.3f, gInputDirection, float3(0.0f, 0.0f, 1.0f));
+    simpleBRDF.setup(gDiffuse, gSpecular, gRoughness, gMetalic, gInputDirection, float3(0.0f, 0.0f, 1.0f));
     float pdf = simpleBRDF.evalPdf(dir,gInputDirection);
 
-    float3 a = float3(5.0,5.0,0.0);
-    float3 b = a + dir * pdf * 10.0f;
+    //if(pdf > 0.1f) pdf = 0.0f;
 
-    float dis = sdCapsule(pos, a, b , 0.1);
+    float3 a = float3(5.0,5.0,0.0);
+    float3 b = a + dir * pdf * 20.0;
+
+    float dis = sdCapsule(pos, a, b , 0.05);
     
     // float radius = min(mappedSize.x, min(mappedSize.y, mappedSize.z)) / 3.0f;
 

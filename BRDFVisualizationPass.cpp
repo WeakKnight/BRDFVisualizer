@@ -22,7 +22,6 @@ void BRDFVisualizationPass::Resize(uint32_t width, uint32_t height)
 void BRDFVisualizationPass::Execute(Texture::SharedPtr m_Grid, RenderContext* pRenderContext)
 {
     auto cb = m_ComputePass["PerFrameCB"];
-    cb["gInputDirection"] = glm::normalize(float3(1.0f,1.0f,1.0f));
     cb["pMaxSteps"] = (uint)1000;
     cb["pMaxDepth"] = 300.0f;
     cb["pTolerance"] = 0.0001f;

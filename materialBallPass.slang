@@ -1,10 +1,16 @@
 import Scene.Shading;
 import Scene.Raster;
+import SimpleBRDF;
+import CommonHelpers;
 
 cbuffer PerFrameCB
 {
 	float4x4 ViewProj;
 	float3 CameraPos;
+    float gRoughness;
+    float gMetalic;
+    float3 gDiffuse;
+    float3 gSpecular;
 };
 
 struct VertexIn
@@ -61,24 +67,18 @@ float4 psMain(VertexOut vOut): SV_Target0
 {
 	const float3 color = 0.5f;
     const float3 lightPos = float3(-0.2f, 9.6f, 7.8f);
-
-    float3 ambient = 0.05f * color;
-
+    float3 viewDir = normalize(CameraPos - vOut.posW);
     float3 lightDir = normalize(lightPos - vOut.posW);
     float3 normal = vOut.normalW;
 
-    float diff = max(dot(lightDir, normal), 0.0);
-    float3 diffuse = diff * color;
 
-    // specular
-    float3 viewDir = normalize(CameraPos - vOut.posW);
-    float3 reflectDir = reflect(-lightDir, normal);
-    float spec = 0.0;
-    float3 halfwayDir = normalize(lightDir + viewDir);  
-    spec = pow(max(dot(normal, halfwayDir), 0.0), 32.0);
-     
-    float3 specular = float3(0.3) * spec;
+    SimpleBRDF simpleBRDF;
+    simpleBRDF.setup(gDiffuse, gSpecular, gRoughness, gMetalic, lightDir, normal);
     
-	
-    return float4(ambient + diffuse + specular, 1.0);;
+
+    float3 wi = ToLocal(lightDir, normal);
+    float3 wo = ToLocal(viewDir, normal);
+    float3 brdfValue = simpleBRDF.evalFr(wo, wi);
+
+    return float4(brdfValue * color + float3(0.1f), 1.0);;
 }

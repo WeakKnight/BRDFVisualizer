@@ -9,12 +9,17 @@ sdfConstructionPass::SharedPtr sdfConstructionPass::Create()
     return result;
 }
 
-void sdfConstructionPass::Execute(RenderContext* pRenderContext, uint dispatchGroupIndex)
+void sdfConstructionPass::Execute(RenderContext* pRenderContext, uint dispatchGroupIndex, float3 m_Wi, float roughness, float metalic, float3 diffuse, float3 specular)
 {
     auto cb = m_ComputePass["PerFrameCB"];
     cb["gridSize"] = uint3(256,256,256);
     cb["mappedSize"] = float3(10.0f,10.0f,10.0f);
-    cb["gInputDirection"] = glm::normalize(float3(1.0f, 1.0f, 1.0f));
+    cb["gInputDirection"] = m_Wi;
+    cb["gRoughness"] = roughness;
+    cb["gMetalic"] = metalic;
+    cb["gDiffuse"] = diffuse;
+    cb["gSpecular"] = specular;
+
 
     for (int i = dispatchGroupIndex * 256; i < dispatchGroupIndex * 256 + 256; i++)
     {

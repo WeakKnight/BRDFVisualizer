@@ -10,7 +10,7 @@ public:
     using SharedPtr = std::shared_ptr<sdfConstructionPass>;
 
     static sdfConstructionPass::SharedPtr Create();
-    void Execute(RenderContext* renderContext, uint dispatchGroupIndex);
+    void Execute(RenderContext* renderContext, uint dispatchGroupIndex, float3 m_Wi, float roughness, float metalic, float3 diffuse, float3 specular);
     
 
     inline Texture::SharedPtr GetGrid() { return m_Grid; }

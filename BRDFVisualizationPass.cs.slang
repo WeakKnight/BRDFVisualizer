@@ -4,7 +4,6 @@ import SimpleBRDF;
 cbuffer PerFrameCB
 {
     uint2 ImageSize;
-    float3 gInputDirection;
     int pMaxSteps;
     float pMaxDepth;
     float pTolerance;
@@ -26,7 +25,7 @@ RWTexture2D<float4> gOutput;
 Texture3D<float> m_Grid;
 SamplerState _LinearSampler;
 
-float sceneSDF(in SimpleBRDF simplebrdf, in float3 p) {
+float sceneSDF(in float3 p) {
     
     float sdf1 = p.z;
     float sdf2;
@@ -57,22 +56,6 @@ float sceneSDF(in SimpleBRDF simplebrdf, in float3 p) {
     return min(sdf1,sdf2);
 }
 
-float3 normal(in SimpleBRDF simplebrdf,float3 p) 
-{
-    
-    // Measure the change-in-distance along each axis
-    float3 deltaX = float3(pTolerance, 0.0, 0.0);
-    float3 deltaY = float3(0.0, pTolerance, 0.0);
-    float3 deltaZ = float3(0.0, 0.0, pTolerance);
-    
-    float x = sceneSDF(simplebrdf, p + deltaX) - sceneSDF(simplebrdf, p - deltaX);
-    float y = sceneSDF(simplebrdf, p + deltaY) - sceneSDF(simplebrdf, p - deltaY);
-    float z = sceneSDF(simplebrdf, p + deltaZ) - sceneSDF(simplebrdf, p - deltaZ);
-    
-    // Return floattor where SDF gradient is maximized
-    return normalize(float3(x, y, z));
-}
-
 float4 color(float3 normal, float3 direction) {
     
     // Calculate lighting
@@ -90,14 +73,11 @@ float4 color(float3 normal, float3 direction) {
 float march(float3 origin, float3 direction) 
 {
     float depth = 0.0;
-
-    SimpleBRDF simpleBRDF;
-    simpleBRDF.setup(float3(1.0f), float3(0.0f), 0.0f, 0.0f, float3 (0.0f), float3(0.0f, 0.0f, 1.0f));
     
     for (int n = 0; n < pMaxSteps; n++) {
         
         // Get distance to nearest object
-        float distance = sceneSDF(simpleBRDF, origin + depth * direction);
+        float distance = sceneSDF(origin + depth * direction);
         
         // Return when distance is within tolerance
         if (distance <= pTolerance) {
@@ -142,16 +122,12 @@ void main(uint3 launchIndex : SV_DispatchThreadID)
     // Calculate scene depth
     float depth = march(pCameraOrigin, rayDir);
 
-    SimpleBRDF simpleBRDF;
-    simpleBRDF.setup(float3(0.4f), float3(0.4f), 0.1f, 0.6f, gInputDirection, float3(0.0f, 0.0f, 1.0f));
+
 
     gOutput[launchIndex.xy] = float4(1.0f, 0.0f, 0.0f, 1.0f);
     
     // Render color
     if (depth < pMaxDepth) {
-        float3 n = normal(simpleBRDF, pCameraOrigin + depth * rayDir);
-        
-        //gOutput[launchIndex.xy] = color(n, rayDir);
         gOutput[launchIndex.xy] = float4(float3(depth/pMaxDepth),1.0f);
     }
     else {

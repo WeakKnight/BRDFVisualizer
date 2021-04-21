@@ -24,7 +24,7 @@ void MaterialBallPass::Resize(uint32_t width, uint32_t height)
     m_Height = height;
 }
 
-void MaterialBallPass::Execute(RenderContext* pRenderContext)
+void MaterialBallPass::Execute(RenderContext* pRenderContext,float roughness, float metalic, float3 diffuse, float3 specular)
 {
     Camera::SharedPtr camera = GetResourceManager()->GetScene()->getCamera();
     //camera->setFrameWidth(m_Width);
@@ -35,6 +35,10 @@ void MaterialBallPass::Execute(RenderContext* pRenderContext)
     auto cb = m_ProgramVars["PerFrameCB"];
     cb["ViewProj"] = camera->getViewProjMatrix();
     cb["CameraPos"] = camera->getPosition();
+    cb["gRoughness"] = roughness;
+    cb["gMetalic"] = metalic;
+    cb["gDiffuse"] = diffuse;
+    cb["gSpecular"] = specular;
     Scene::RenderFlags renderFlags = Scene::RenderFlags::UserRasterizerState;
 
     const float4 clearColor(0.0f, 0.0f, 0.0f, 1);
@@ -46,10 +50,14 @@ void MaterialBallPass::Execute(RenderContext* pRenderContext)
 
 void MaterialBallPass::CreatePipeline()
 {
+    m_SampleGenerator = SampleGenerator::create(SAMPLE_GENERATOR_UNIFORM);
     Program::Desc desc;
+    auto defineList = Program::DefineList();
+    defineList.add(m_SampleGenerator->getDefines());
+
     desc.addShaderLibrary("Samples/BRDFVisualizer/materialBallPass.slang").vsEntry("vsMain").psEntry("psMain");
     desc.setShaderModel("6_2");
-    m_Program = GraphicsProgram::create(desc);
+    m_Program = GraphicsProgram::create(desc, defineList);
 
     
 
